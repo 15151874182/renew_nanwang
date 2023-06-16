@@ -1,0 +1,7 @@
+PropertyID PropertyName Value
+CalType 算法类型 1
+PlantType 场站类型(0风电站，1光伏电站) 0
+BaseDate 基准日(历史数据的最后一天) 2022-08-07
+HistoryDayNum 历史数据截取天数 96
+ForecastBeginDate 预测开始日期 2022-08-08
+ForecastEndDate 预测结束日期 2022-08-14

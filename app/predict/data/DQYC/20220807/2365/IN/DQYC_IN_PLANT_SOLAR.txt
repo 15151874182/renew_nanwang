@@ -1,0 +1,2 @@
+PlantID PlantName PlantType Vol Cap PlantCap IntegrationDate IntegrationNum
+2356 光伏2356 集中式光伏 110 40.0000 100.0083 null 40
