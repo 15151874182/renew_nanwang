@@ -35,8 +35,8 @@ if __name__ == "__main__":
         areas = args.area.split(',')  # list type
 # get config=============================================================================
     from config.parameter_config import ConfigParser    
-    config = ConfigParser('1078',project_path)
-    # config = ConfigParser('2365',project_path)
+    # config = ConfigParser('1078',project_path)
+    config = ConfigParser('2365',project_path)
     setattr(config, 'mode', 'train')
 # get config====================================================================    
     from short_term_agent import ShortTermAgent
@@ -58,24 +58,24 @@ if __name__ == "__main__":
 # model train and finetune===========================================================        
     from model import MyLGB
     mylgb=MyLGB(config)
-    best_model=mylgb.finetune(agent.x_train, agent.y_train, agent.x_val, agent.y_val, n_trials=200) ##finetune include train process
-    
-    
-    
-    # best_model=mylgb.train(renew.x_train, renew.y_train, renew.x_val, renew.y_val)
+    # best_model=mylgb.finetune(agent.x_train, agent.y_train, agent.x_val, agent.y_val, n_trials=200) ##finetune include train process
+    # best_model=mylgb.train(agent.x_train, agent.y_train, agent.x_val, agent.y_val)
     
 # model save===========================================================  
     import joblib          
     setattr(config, 'model_path', os.path.join(config.area_path,'model'))
     if not os.path.exists(config.model_path):
         os.makedirs(config.model_path) 
-    joblib.dump(best_model, os.path.join(config.model_path,'lgb.pkl'))
+    # joblib.dump(best_model, os.path.join(config.model_path,'lgb.pkl'))
     
 # model load===========================================================    
     best_model = joblib.load(os.path.join(config.model_path,'lgb.pkl'))
 # model predict===========================================================            
     y_pred=mylgb.predict(best_model, agent.x_test)
-    acc_mape=mylgb.eval_result(y_pred, agent.y_test, config.capacity)
+    if config.area_type=='pv':
+        y_pred=cleaner.sunset_zero(y_pred,'pred')
+# predict post process===========================================================    
+    acc_mape=mylgb.eval_result(np.array(y_pred), np.array(agent.y_test), config.capacity)
     res=pd.concat([y_pred, agent.y_test],axis=1)
     res.columns=['pred','gt']
     plot_peroid(res,filename='res',cols = ['pred','gt'],start_day = res.index[0],end_day=None,days = 30,maxmin=False)

@@ -83,7 +83,7 @@ class Clean():
             if area_type=='wind':
                 pass  ##special strategy for wind if have will be put here 
             elif area_type=='pv':
-                if ("rad" or 'load') in col:  ## fea related to suntime
+                if 'rad' in col or 'Power' in col:  ## fea related to suntime
                     df=self.sunset_zero(df,col)
 #handle_constant================================================================        
         ##constant=0 or capacity will be ignored,constant=0 problem will be put into similarity detect part             
@@ -169,6 +169,7 @@ class Clean():
         df_list = [(df.iloc[i * freq:(i + 1) * freq]['col1'], df.iloc[i *
                     freq:(i + 1) * freq]['col2']) for i in range(int(len(df) / freq))]
         res = pd.Series(map(lambda x: np.mean(abs(x[0] - x[1])) * 1000, df_list))
+        res=res.fillna(np.float('inf'))  ##asign inf for NAN value
         filted_res = res[res <= np.quantile(res, float(quantile))].index.tolist() 
         df_list = [df.iloc[i * freq:(i + 1) * freq] for i in filted_res]
         df = pd.concat(df_list, axis=0)

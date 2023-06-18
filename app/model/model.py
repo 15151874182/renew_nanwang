@@ -38,7 +38,7 @@ class MyLGB():
     
     def predict(self, model,x_test):
         y_pred = model.predict(x_test)
-        y_pred=pd.Series(y_pred,index=x_test.index) ##put date info into datframe index
+        y_pred=pd.DataFrame(y_pred,index=x_test.index,columns=['pred']) ##put date info into datframe index
         return y_pred
 
     def eval_result(self, pred, gt, Capacity):
