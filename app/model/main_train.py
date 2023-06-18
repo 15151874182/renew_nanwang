@@ -58,7 +58,7 @@ if __name__ == "__main__":
 # model train and finetune===========================================================        
     from model import MyLGB
     mylgb=MyLGB(config)
-    # best_model=mylgb.finetune(agent.x_train, agent.y_train, agent.x_val, agent.y_val, n_trials=200) ##finetune include train process
+    best_model=mylgb.finetune(agent.x_train, agent.y_train, agent.x_val, agent.y_val, n_trials=200) ##finetune include train process
     # best_model=mylgb.train(agent.x_train, agent.y_train, agent.x_val, agent.y_val)
     
 # model save===========================================================  
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     setattr(config, 'model_path', os.path.join(config.area_path,'model'))
     if not os.path.exists(config.model_path):
         os.makedirs(config.model_path) 
-    # joblib.dump(best_model, os.path.join(config.model_path,'lgb.pkl'))
+    joblib.dump(best_model, os.path.join(config.model_path,'lgb.pkl'))
     
 # model load===========================================================    
     best_model = joblib.load(os.path.join(config.model_path,'lgb.pkl'))

@@ -89,6 +89,7 @@ class ShortTermAgent():
         
         ####general FE
         df=date_to_timeFeatures(df)# time discretization feature        
+        df['capacity']=config.capacity
         
         if config.area_type=='wind':##wind special FE
             speed_cols=[fea for fea in config.feas_used if 'Speed' in fea] 
@@ -98,11 +99,11 @@ class ShortTermAgent():
             df=dir_to_sincos_dir(df,dir_feas,delete=True)
             
         elif config.area_type=='pv':##pv special FE
-            df=fea_shift(df,name='Power',N=4)# lagged load feature  
+            # df=fea_shift(df,name='Power',N=4)# lagged load feature  
         
-            rad_cols=[fea for fea in config.feas_used if 'rad' in fea] 
-            df=rad_diff(df,rad_cols)
-
+            # rad_cols=[fea for fea in config.feas_used if 'rad' in fea] 
+            # df=rad_diff(df,rad_cols)
+            pass
         return df
 
     def subset_selection(self, model):
