@@ -15,7 +15,8 @@ class ConfigParser:
     
     def __init__(self, area, project_path):
         self.area = area
-        self.area_path = os.path.join(project_path, 'model','data', 'DQYC','20220807',area)
+        self.area_train_path = os.path.join(project_path, 'model','data', 'DQYC','20220807',area)
+        self.area_predict_path = os.path.join(project_path, 'predict','data', 'DQYC','20220807',area)
         self.area_info = pd.read_csv(os.path.join(project_path, 'model','config','area_info.csv'),dtype={'FarmCode':str})
         
         self.capacity = self.area_info[self.area_info["FarmCode"] == area]['capacity'].iloc[0]

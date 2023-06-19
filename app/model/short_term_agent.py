@@ -15,7 +15,7 @@ warnings.filterwarnings('ignore')
 import lightgbm as lgb
 import xgboost as xgb
 from tools.logger import setup_logger
-from data_clean import Clean
+from model.data_clean import Clean
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 logger = setup_logger('logger')
@@ -44,14 +44,14 @@ class ShortTermAgent():
     def load_data(self, config, mode='train', unit='MW'): #mode='train'/'predict'  unit='MW'/'KW'
         if mode=='train':
             self.real_load = pd.read_csv(os.path.join(
-                config.area_path, 'IN','DQYC_IN_HISTORY_POWER_LONG.txt'), sep=' ',index_col='Datetime', parse_dates=True)
+                config.area_train_path, 'IN','DQYC_IN_HISTORY_POWER_LONG.txt'), sep=' ',index_col='Datetime', parse_dates=True)
             del self.real_load['PlantID']
             self.fore_wea = pd.read_csv(os.path.join(
-                config.area_path, 'IN', '0','DQYC_IN_FORECAST_WEATHER_H.txt'), sep=' ', index_col='Datetime', parse_dates=True)
+                config.area_train_path, 'IN', '0','DQYC_IN_FORECAST_WEATHER_H.txt'), sep=' ', index_col='Datetime', parse_dates=True)
             self.data = self.fore_wea.join(self.real_load).dropna(how='all')  ##only all NAN in one row will be dropped
         elif mode=='predict':
             self.fore_wea = pd.read_csv(os.path.join(
-                config.area_path, 'IN', '0','DQYC_IN_FORECAST_WEATHER.txt'), sep=' ', index_col='Datetime', parse_dates=True)
+                config.area_predict_path, 'IN', '0','DQYC_IN_FORECAST_WEATHER.txt'), sep=' ', index_col='Datetime', parse_dates=True)
             self.data=self.fore_wea
             
         # self.data.rename(columns={'GlobalR': 'rad_GlobalR', 'AirT': 'temp',
@@ -85,7 +85,7 @@ class ShortTermAgent():
 
     def feature_engineering(self, data, config):
         df = deepcopy(data)
-        from feature_engineer import date_to_timeFeatures, dir_to_sincos_dir, fea_shift, speed_diff, rad_diff
+        from model.feature_engineer import date_to_timeFeatures, dir_to_sincos_dir, fea_shift, speed_diff, rad_diff
         
         ####general FE
         df=date_to_timeFeatures(df)# time discretization feature        
@@ -143,7 +143,7 @@ class ShortTermAgent():
         print('embedded_feas_used:', embedded_feas_used)
 
         return list(filter_feas_used), list(wrapper_feas_used), list(embedded_feas_used)
-
+        
 
 
     def investigate_model(self, model, feas_used, name='tuned_SVC'):

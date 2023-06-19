@@ -14,8 +14,8 @@ warnings.filterwarnings('ignore')
 
 import lightgbm as lgb
 import xgboost as xgb
-from tools.logger import setup_logger
-from data_clean import Clean
+from model.tools.logger import setup_logger
+from model.data_clean import Clean
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 logger = setup_logger('logger')
@@ -41,11 +41,18 @@ class MyLGB():
         y_pred=pd.DataFrame(y_pred,index=x_test.index,columns=['pred']) ##put date info into datframe index
         return y_pred
 
-    def eval_result(self, pred, gt, Capacity):
-        return 1-np.sqrt(((gt - pred)**2/Capacity**2).mean())
-
-
+    def eval_result(self, res, Capacity):
+        ## res(DataFrame) must at least have 'gt' and 'pred' cols
+        df=deepcopy(res)
+        def _fun(row):
+            if row['gt']<0.2*Capacity:
+                return 1-np.sqrt((row['gt'] - row['pred'])**2/(0.2*Capacity)**2)
+            else:
+                return 1-np.sqrt((row['gt'] - row['pred'])**2/Capacity**2)                                 
+        df['acc']=df.apply(_fun,axis=1)        
         
+        return df['acc'].mean()
+
     def finetune(self, x_train,y_train,x_val,y_val, n_trials=100):
 
         import optuna
