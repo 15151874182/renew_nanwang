@@ -41,19 +41,6 @@ class MyLGB():
         y_pred=pd.DataFrame(y_pred,index=x_test.index,columns=['pred']) ##put date info into datframe index
         return y_pred
 
-    def eval_result(self, res, Capacity):
-        ## res(DataFrame) must at least have 'gt' and 'pred' cols
-        df=deepcopy(res)
-        def _nanwang_error(row):
-            if row['gt']<0.1*Capacity and row['pred']<0.1*Capacity:
-                return np.nan
-            if row['gt']<0.2*Capacity:
-                return (row['gt'] - row['pred'])**2/(0.2*Capacity)**2
-            else:
-                return (row['gt'] - row['pred'])**2/row['gt']**2                                
-        df['error']=df.apply(_nanwang_error,axis=1)        
-        return 1-np.sqrt(df['error'].mean()) ##NaN value will not be considered by mean() 
-
     def finetune(self, x_train,y_train,x_val,y_val, n_trials=100):
 
         import optuna

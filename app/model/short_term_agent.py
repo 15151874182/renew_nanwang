@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 
 import lightgbm as lgb
 import xgboost as xgb
-from tools.logger import setup_logger
+from model.tools.logger import setup_logger
 from model.data_clean import Clean
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
@@ -106,29 +106,32 @@ class ShortTermAgent():
             pass
         return df
 
-    def subset_selection(self, model):
+    def subset_selection(self, model,config):
         # filter method
         from sklearn.feature_selection import SelectKBest, f_classif
         # Use correlation coefficients to select most relevant features
         selector = SelectKBest(score_func=f_classif,
                                k=int(len(self.x_train.columns)*0.8))
-        x_selected = selector.fit_transform(self.x_train_scaled, self.y_train)
+        x_selected = selector.fit_transform(self.x_train, self.y_train)
         feature_indices = selector.get_support(indices=True)
         filter_feas_used = self.x_train.columns[feature_indices]
         print('filter_feas_used:', filter_feas_used)
 
         # wrapper method use  Backward Elimination
-        model.fit(self.x_train_scaled, self.y_train)
-        y_val_pred = model.predict_proba(self.x_val_scaled)[:, 1]
-        best_score = roc_auc_score(self.y_val, y_val_pred)
+        model.fit(self.x_train, self.y_train)
+        y_val_pred = model.predict(self.x_val)
+        from model.tools.get_res import get_res
+        from model.tools.eval_res import eval_res
+        res=get_res(y_val_pred, self.y_val)
+        best_score = eval_res(res, config.capacity)
         wrapper_feas_used = list(self.x_train.columns)  # init fea_list
         for fea in tqdm(self.x_train.columns):
             wrapper_feas_used.remove(fea)
-            model.fit(self.zscore(self.x_train[wrapper_feas_used],
-                                  verbose='feas_used_transform', feas_used=wrapper_feas_used), self.y_train)
-            y_val_pred = model.predict_proba(self.zscore(
-                self.x_val[wrapper_feas_used], verbose='feas_used_transform', feas_used=wrapper_feas_used))[:, 1]
-            score = roc_auc_score(self.y_val, y_val_pred)
+            model.fit(self.x_train[wrapper_feas_used], self.y_train)
+            y_val_pred = model.predict(self.x_val[wrapper_feas_used])
+            
+            res=get_res(y_val_pred, self.y_val)
+            score = eval_res(res, config.capacity)
             if score < best_score:  # if remove this fea and score decrease means this fea should remain
                 wrapper_feas_used.append(fea)  # recovery this fea
             else:

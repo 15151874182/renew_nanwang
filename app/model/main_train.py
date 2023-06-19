@@ -22,7 +22,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--area",
         type=str,
-        default="all",  # all for all areas // NARI-19008-Xibei-dtqlyf,NARI-19008-Xibei-dtqlyf for 2 areas
+        default="1078",  # all for all areas // NARI-19008-Xibei-dtqlyf,NARI-19008-Xibei-dtqlyf for 2 areas
         help="name of areas to predict, 1, more, all areas both ok",
     )
     args = parser.parse_args()
@@ -45,8 +45,6 @@ if __name__ == "__main__":
         from model.short_term_agent import ShortTermAgent
         agent = ShortTermAgent()
         agent.load_data(config, mode='train', unit='MW') ##unit of MW in power file
-        
-        
         setattr(config, 'data', agent.data)
     # data_clean=============================================================================
         from model.data_clean import Clean
@@ -58,9 +56,17 @@ if __name__ == "__main__":
         cln_FE_data=agent.feature_engineering(cln_data,config)  ##FE means feature_engineering
     # data_split_scale=============================================================        
         agent.data_split_scale(cln_FE_data,random_state=123)# renew.x_train/x_val/x_test/x_train_scaled/x_val_scaled/x_test_scaled/y_train/y_val/y_test
-    # model train and finetune===========================================================        
+    # create model by config===========================================================        
         from model.model import MyLGB
         mylgb=MyLGB(config)
+
+
+
+    # subset_selection======================================================================        
+        base_model=mylgb.build_model()
+        filter_feas_used, wrapper_feas_used, embedded_feas_used=agent.subset_selection(base_model,config)  ##use base for fea selection
+    
+    # model train and finetune=======================================================        
         best_model=mylgb.finetune(agent.x_train, agent.y_train, agent.x_val, agent.y_val, n_trials=200) ##finetune include train process
         # best_model=mylgb.train(agent.x_train, agent.y_train, agent.x_val, agent.y_val)
         
@@ -78,10 +84,11 @@ if __name__ == "__main__":
     # predict post process===========================================================    
         if config.area_type=='pv':
             y_pred=cleaner.sunset_zero(y_pred,'pred')   
-    # eval_result===========================================================
-        res=pd.concat([y_pred, agent.y_test],axis=1)
-        res.columns=['pred','gt']
-        acc_mape=mylgb.eval_result(res, config.capacity)
+    # eval_res===========================================================
+        from model.tools.get_res import get_res
+        from model.tools.eval_res import eval_res
+        res=get_res(y_pred, agent.y_test)
+        acc_mape=eval_res(res, config.capacity)
         print(acc_mape)    
         plot_peroid(res,filename='res',cols = ['pred','gt'],start_day = res.index[0],end_day=None,days = 30,maxmin=False)
 
