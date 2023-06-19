@@ -12,6 +12,11 @@ import logging
 import warnings
 warnings.filterwarnings('ignore') 
 
+# get project_path=============================================================================
+project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# sys.path.append(project_path)
+sys.path.insert(0,project_path) ##search mine dir first, because model.tools in somewhere else of sys.path
+    
 from model.tools.plot_view import plot_peroid
 from model.tools.logger import setup_logger
 logger = setup_logger('logger')
@@ -26,9 +31,7 @@ if __name__ == "__main__":
         help="name of areas to predict, 1, more, all areas both ok",
     )
     args = parser.parse_args()
-# get project_path=============================================================================
-    project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sys.path.append(project_path)
+
 # get areas_list=============================================================
     if args.area == "all":
         areas = os.listdir(os.path.join(project_path, 'model','data', 'DQYC','20220807'))

@@ -13,15 +13,16 @@ import logging
 import warnings
 warnings.filterwarnings('ignore') 
 
+# get project_path=============================================================================
+project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0,project_path) ##search mine dir first, because model.tools in somewhere else of sys.path
+
 from model.tools.plot_view import plot_peroid
 from model.tools.logger import setup_logger
 logger = setup_logger('logger')
     ## python /home/app/predict/main.pyc 20220909/1030/IN
 # =============================================================================
 day_area_path=sys.argv[1]
-# get project_path=============================================================================
-project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(project_path)
 # get area=============================================================
 area=day_area_path.split('/')[1]
 
