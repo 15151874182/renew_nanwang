@@ -40,7 +40,6 @@ try:
     agent = ShortTermAgent()
     agent.load_data(config, mode='predict', unit='MW') ##unit of MW in power file
     
-    
     setattr(config, 'data', agent.data)
 # data_clean=============================================================================
     from model.data_clean import Clean
@@ -50,13 +49,14 @@ try:
     try: # make sure clean_area wont fail!
         cln_data = cleaner.clean_area(config,online=True,plot=False) ##cln means cleaned
     except:
-        cln_data=config.data[config.feas_used].interpolate(method='linear')
+        cln_data=config.data[config.feas_selected].interpolate(method='linear')
         logger.info(traceback.format_exc())
     # cln_data = cleaner.clean_area(config,online=True,plot=[['Power', 'Speed100'], "2022-05-02", 30])
     # cln_data=cln_data.dropna()# ## nothing can be dropped in 'predict' mode! 
     
 # feature_engineering======================================================================        
     cln_FE_data=agent.feature_engineering(cln_data,config)  ##FE means feature_engineering         
+    cln_FE_data=cln_FE_data[config.feas_selected]
 # model load===========================================================   
     from model.model import MyLGB
     mylgb=MyLGB(config)

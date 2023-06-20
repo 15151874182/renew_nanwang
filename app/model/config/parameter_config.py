@@ -27,6 +27,7 @@ class ConfigParser:
 
         self.models_used = self.area_info[self.area_info["FarmCode"] == area]['models_used'].iloc[0]
         self.feas_used = self.area_info[self.area_info["FarmCode"] == area]['feas_used'].iloc[0].split('+')
+        self.feas_selected = self.area_info[self.area_info["FarmCode"] == area]['feas_selected'].iloc[0].split('+')
         
         #In json.loads(dict), '' for key and value must be replaced by "" in dict, use true not True 
         self.xgb_param = json.loads(self.area_info[self.area_info["FarmCode"] == area]['xgb_param'].iloc[0])
