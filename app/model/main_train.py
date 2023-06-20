@@ -27,7 +27,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--area",
         type=str,
-        default="1078",  # all for all areas // NARI-19008-Xibei-dtqlyf,NARI-19008-Xibei-dtqlyf for 2 areas
+        default="all",  # all for all areas // NARI-19008-Xibei-dtqlyf,NARI-19008-Xibei-dtqlyf for 2 areas
         help="name of areas to predict, 1, more, all areas both ok",
     )
     args = parser.parse_args()
@@ -63,14 +63,17 @@ if __name__ == "__main__":
         from model.model import MyLGB
         mylgb=MyLGB(config)
 
-
-
     # subset_selection======================================================================        
         base_model=mylgb.build_model()
-        filter_feas_used, wrapper_feas_used, embedded_feas_used=agent.subset_selection(base_model,config)  ##use base for fea selection
-    
+        feas_selected=agent.subset_selection(base_model,config)  ##use base model for feas selection
+    # save feas_selected to area_info.csv==========================================================
+        feas_selected_str='+'.join(feas_selected)
+        selected_idx=config.area_info[config.area_info["FarmCode"] == config.area].index
+        config.area_info.loc[selected_idx, "feas_selected"]=feas_selected_str
+        config.area_info.to_csv(config.area_info_path)
     # model train and finetune=======================================================        
-        best_model=mylgb.finetune(agent.x_train, agent.y_train, agent.x_val, agent.y_val, n_trials=200) ##finetune include train process
+        best_model=mylgb.finetune(config, agent.x_train[feas_selected], agent.y_train,
+                                  agent.x_val[feas_selected],   agent.y_val, n_trials=200) ##finetune include train process
         # best_model=mylgb.train(agent.x_train, agent.y_train, agent.x_val, agent.y_val)
         
     # model save===========================================================  
@@ -80,10 +83,11 @@ if __name__ == "__main__":
             os.makedirs(config.model_path) 
         joblib.dump(best_model, os.path.join(config.model_path,'lgb.pkl'))
         
-    # model load===========================================================    
-        best_model = joblib.load(os.path.join(config.model_path,'lgb.pkl'))
+    # # model load===========================================================    
+    #     best_model = joblib.load(os.path.join(config.model_path,'lgb.pkl'))
+    
     # model predict===========================================================            
-        y_pred=mylgb.predict(best_model, agent.x_test)
+        y_pred=mylgb.predict(best_model, agent.x_test[feas_selected])
     # predict post process===========================================================    
         if config.area_type=='pv':
             y_pred=cleaner.sunset_zero(y_pred,'pred')   

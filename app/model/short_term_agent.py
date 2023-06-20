@@ -89,8 +89,7 @@ class ShortTermAgent():
         
         ####general FE
         df=date_to_timeFeatures(df)# time discretization feature        
-        df['capacity']=config.capacity
-        
+
         if config.area_type=='wind':##wind special FE
             speed_cols=[fea for fea in config.feas_used if 'Speed' in fea] 
             df=speed_diff(df,speed_cols)
@@ -125,6 +124,7 @@ class ShortTermAgent():
         res=get_res(y_val_pred, self.y_val)
         best_score = eval_res(res, config.capacity)
         wrapper_feas_used = list(self.x_train.columns)  # init fea_list
+        
         for fea in tqdm(self.x_train.columns):
             wrapper_feas_used.remove(fea)
             model.fit(self.x_train[wrapper_feas_used], self.y_train)
@@ -141,11 +141,23 @@ class ShortTermAgent():
         # Embedded method use Lasso
         from sklearn.linear_model import Lasso
         lasso = Lasso(alpha=0.001)
-        lasso.fit(self.x_train_scaled.values, self.y_train)
+        lasso.fit(self.x_train_scaled, self.y_train)
         embedded_feas_used = self.x_train.columns[lasso.coef_ != 0]
         print('embedded_feas_used:', embedded_feas_used)
 
-        return list(filter_feas_used), list(wrapper_feas_used), list(embedded_feas_used)
+        ##test original feas and three methods' selected feas and find the best
+        names=['origin feas','filter_selected_feas','wrapper_selected_feas','embedded_selected_feas']
+        dic={}
+        feas=[list(self.x_train.columns),filter_feas_used, wrapper_feas_used,embedded_feas_used]
+        for id,feas_list in enumerate(feas):
+            model.fit(self.x_train[feas_list],self.y_train)
+            y_test_pred=model.predict(self.x_test[feas_list])
+            
+            res=get_res(y_test_pred, self.y_test)
+            test_score = eval_res(res, config.capacity)
+            print(f'{names[id]}:',test_score)
+            dic[id]=test_score
+        return list(feas[max(dic,key=dic.get)]) ##get the feas with best test_score
         
 
 

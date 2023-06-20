@@ -41,7 +41,7 @@ class MyLGB():
         y_pred=pd.DataFrame(y_pred,index=x_test.index,columns=['pred']) ##put date info into datframe index
         return y_pred
 
-    def finetune(self, x_train,y_train,x_val,y_val, n_trials=100):
+    def finetune(self, config, x_train,y_train,x_val,y_val, n_trials=100):
 
         import optuna
 
@@ -75,11 +75,15 @@ class MyLGB():
             model = lgb.LGBMRegressor(**param)
             model.fit(x_train,y_train)
             y_val_pred = model.predict(x_val)
-            mse = mean_squared_error(y_val, y_val_pred)
-            return mse
+            from model.tools.get_res import get_res
+            from model.tools.eval_res import eval_res
+            res=get_res(y_val_pred, y_val)
+            acc_mape=eval_res(res, config.capacity)            
+
+            return acc_mape
         
         study = optuna.create_study(
-            direction='minimize')  # maximize the auc
+            direction='maximize')  # maximize the auc
         study.optimize(objective, n_trials=n_trials)
         print("Best parameters:", study.best_params)
         best_model = lgb.LGBMRegressor( **study.best_params)

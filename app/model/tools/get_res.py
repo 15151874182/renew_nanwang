@@ -14,8 +14,9 @@ import warnings
 warnings.filterwarnings('ignore') 
 
 def get_res(pred,gt):
-    pred=np.array(pred)
-    gt=np.array(gt)
-    res=pd.DataFrame()
+    date_index=gt.index
+    pred=np.array(pred).reshape(-1)
+    gt=np.array(gt).reshape(-1)
+    res=pd.DataFrame(index=date_index)
     res['pred'],res['gt']=pred,gt
     return res
