@@ -18,7 +18,7 @@ from model.tools.logger import setup_logger
 from model.data_clean import Clean
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
-logger = setup_logger('logger')
+# logger = setup_logger('logger')
 
 # =============================================================================
 class ShortTermAgent():

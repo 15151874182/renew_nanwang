@@ -1,0 +1,31 @@
+2023-06-20 17:07:27,119 - main_train.py[line:46] - INFO: 1078 start training!##################################
+2023-06-20 17:07:27,135 - main_train.py[line:51] - INFO: get_config succeed!
+2023-06-20 17:07:29,666 - main_train.py[line:55] - INFO: create_agent succeed!
+2023-06-20 17:07:29,772 - main_train.py[line:59] - INFO: load_data succeed!
+2023-06-20 17:07:41,935 - main_train.py[line:66] - INFO: data_clean succeed!
+2023-06-20 17:07:41,994 - main_train.py[line:69] - INFO: feature_engineering succeed!
+2023-06-20 17:07:42,008 - main_train.py[line:72] - INFO: data_split_scale succeed!
+2023-06-20 17:07:42,012 - main_train.py[line:76] - INFO: create_model succeed!
+2023-06-20 17:07:50,617 - main_train.py[line:80] - INFO: subset_selection succeed!
+2023-06-20 17:07:50,627 - main_train.py[line:86] - INFO: save_feas_selected succeed!
+2023-06-20 17:08:27,512 - main_train.py[line:91] - INFO: model_finetune succeed!
+2023-06-20 17:08:27,527 - main_train.py[line:98] - INFO: model_save succeed!
+2023-06-20 17:08:27,538 - main_train.py[line:104] - INFO: model_predict succeed!
+2023-06-20 17:08:27,580 - main_train.py[line:114] - INFO: acc_mape: 0.4425570216309087 !!!!!!!!!!!
+2023-06-20 17:08:27,935 - main_train.py[line:117] - INFO: eval_res succeed!
+2023-06-20 17:08:27,956 - main_train.py[line:46] - INFO: 2365 start training!##################################
+2023-06-20 17:08:27,977 - main_train.py[line:51] - INFO: get_config succeed!
+2023-06-20 17:08:27,980 - main_train.py[line:55] - INFO: create_agent succeed!
+2023-06-20 17:08:28,124 - main_train.py[line:59] - INFO: load_data succeed!
+2023-06-20 17:08:36,463 - main_train.py[line:66] - INFO: data_clean succeed!
+2023-06-20 17:08:36,538 - main_train.py[line:69] - INFO: feature_engineering succeed!
+2023-06-20 17:08:36,548 - main_train.py[line:72] - INFO: data_split_scale succeed!
+2023-06-20 17:08:36,551 - main_train.py[line:76] - INFO: create_model succeed!
+2023-06-20 17:08:39,143 - main_train.py[line:80] - INFO: subset_selection succeed!
+2023-06-20 17:08:39,150 - main_train.py[line:86] - INFO: save_feas_selected succeed!
+2023-06-20 17:09:13,596 - main_train.py[line:91] - INFO: model_finetune succeed!
+2023-06-20 17:09:13,616 - main_train.py[line:98] - INFO: model_save succeed!
+2023-06-20 17:09:13,630 - main_train.py[line:104] - INFO: model_predict succeed!
+2023-06-20 17:09:13,797 - main_train.py[line:108] - INFO: post_process succeed!
+2023-06-20 17:09:13,840 - main_train.py[line:114] - INFO: acc_mape: 0.4056449527730065 !!!!!!!!!!!
+2023-06-20 17:09:14,147 - main_train.py[line:117] - INFO: eval_res succeed!
