@@ -126,7 +126,7 @@ class Clean():
     def handle_NAN(self,data,col,threshold):
         df=deepcopy(data)
         #### spline interpolate if continues num of NAN is within threshold
-        df[col].interpolate(method='linear', limit=threshold,axis=0)
+        df[col]=df[col].interpolate(method='linear', limit=threshold,axis=0)
         return df
 
     def handle_limit(self,data,col,lower,upper):
@@ -151,7 +151,8 @@ class Clean():
         for i in constant_end_index:
             constant_index+=[j for j in range(i-threshold+1,i+1)]
         df['index']=df['index'].apply(lambda x: False if x in constant_index else True)
-        df=df[df['index']==True] ##remain index wanted
+        idx=df[df['index']==False].index
+        df[col].loc[idx]=np.nan
         del df['index'],df['constant_std'],df['constant_mu'] ##delete auxiliary varible
         return df
 
