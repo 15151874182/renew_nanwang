@@ -47,6 +47,14 @@ try:  ##any bug of whole procedure will be recorded in ./logs/logger.log
             # get_config=============================================================================
                 from model.config.parameter_config import ConfigParser    
                 config = ConfigParser(area,project_path)
+                
+                logger.info(f'area_train_path:{config.area_train_path}')
+                logger.info(f'area_type:{config.area_type}')
+                logger.info(f'capacity:{config.capacity}')
+                logger.info(f'feas_used:{config.feas_used}')
+                logger.info(f'feas_selected:{config.feas_selected}')
+                logger.info(f'trend:{config.trend}')
+                
                 setattr(config, 'mode', 'train')
                 logger.info('get_config succeed!')
             # create_agent====================================================================    
@@ -60,8 +68,8 @@ try:  ##any bug of whole procedure will be recorded in ./logs/logger.log
             # data_clean=============================================================================
                 from model.data_clean import Clean
                 cleaner = Clean()        
-                cln_data = cleaner.clean_area(config,online=False,plot=False) ##cln means cleaned
-                # cln_data = cleaner.clean_area(config,online=True,plot=[['Power', 'Speed100'], "2022-05-02", 30])
+                # cln_data = cleaner.clean_area(config,online=False,plot=False) ##cln means cleaned
+                cln_data = cleaner.clean_area(config,online=False,plot=[['Power', 'Speed100'], "2022-05-02", 30])
                 cln_data=cln_data.dropna()# cleaned_data change unwanted data into NaN,so dropna used in 'train' mode    
                 logger.info('data_clean succeed!')
             # feature_engineering======================================================================        
@@ -82,7 +90,7 @@ try:  ##any bug of whole procedure will be recorded in ./logs/logger.log
                 feas_selected_str='+'.join(feas_selected)
                 selected_idx=config.area_info[config.area_info["FarmCode"] == config.area].index
                 config.area_info.loc[selected_idx, "feas_selected"]=feas_selected_str
-                config.area_info.to_csv(config.area_info_path)
+                config.area_info.to_csv(config.area_info_path,index=False)
                 logger.info('save_feas_selected succeed!')
             # model train and finetune=======================================================        
                 best_model=mylgb.finetune(config, agent.x_train[feas_selected], agent.y_train,

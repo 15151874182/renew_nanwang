@@ -48,7 +48,7 @@ class Clean():
                                                 end="2024-12-31")
             self.suntime["sunrise_before"] = self.suntime["Sunrise"].apply(lambda x:pd.to_datetime(x).round('15T'))
             self.suntime["sunset_after"] = self.suntime["Sunset"].apply(lambda x:pd.to_datetime(x).round('15T'))  
-            self.suntime.to_csv('config/suntime.csv')
+            self.suntime.to_csv('config/suntime.csv',index=False)
             
         elif area_type=='pv' and online==False:
             self.suntime = pd.read_csv('config/suntime.csv', parse_dates=['Date', 'Sunrise', 'Sunset', 'sunrise_before','sunset_after'])
@@ -73,7 +73,7 @@ class Clean():
                 upper,lower = capacity,0  
             else:
                 upper,lower=float('inf'),float('-inf')
-            logging.info(f"{col},upper={upper},lower={lower}")   
+            logger.info(f"{col},upper={upper},lower={lower}")   
             
 #handle_NAN =================================================================  
             df=self.handle_NAN(df,col,threshold=day_point//6)
@@ -100,8 +100,8 @@ class Clean():
 #if plot cleaned result========================================================================        
         if plot:
             feas,start_day,days=plot[0],plot[1],plot[2]
-            plot_peroid(data,'before',cols = feas,start_day = start_day,end_day=None,days = days,maxmin=True)
-            plot_peroid(df,'after',cols = feas,start_day = start_day,end_day=None,days = days,maxmin=True)   
+            plot_peroid(data,'before',cols = feas,start_day = start_day,end_day=None,days = days,maxmin=False)
+            plot_peroid(df,'after',cols = feas,start_day = start_day,end_day=None,days = days,maxmin=False)   
         del df['date']
         return df   ##after clean process, this return df has NaN which must drop or interpolate according to train or predict model
             

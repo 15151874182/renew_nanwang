@@ -38,6 +38,13 @@ try:
         # get_config=============================================================================
             from model.config.parameter_config import ConfigParser    
             config = ConfigParser(area,project_path)
+            
+            logger.info(f'area_predict_path:{config.area_predict_path}')
+            logger.info(f'area_type:{config.area_type}')
+            logger.info(f'capacity:{config.capacity}')
+            logger.info(f'feas_selected:{config.feas_selected}')
+         
+            
             setattr(config, 'mode', 'predict')
             logger.info('get_config succeed!')
         # create_agent====================================================================    
