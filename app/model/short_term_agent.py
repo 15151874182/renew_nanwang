@@ -76,13 +76,15 @@ class ShortTermAgent():
             x, y, random_state=random_state, shuffle=False, test_size=0.2)  # split test first
         self.x_train, self.x_val, self.y_train, self.y_val = train_test_split(
             x_trainval, y_trainval, random_state=random_state, shuffle=False, test_size=0.2)  # then split val
-        self.x_train_scaled = self.zscore(
-            self.x_train, mode='fit_transform', feas_used=None)
-        self.x_val_scaled = self.zscore(
-            self.x_val, mode='transform', feas_used=None)
-        self.x_test_scaled = self.zscore(
-            self.x_test, mode='transform', feas_used=None)
-
+        
+        self.x_train_scaled = self.zscore(self.x_train, mode='fit_transform', feas_used=None)
+        self.x_val_scaled = self.zscore(self.x_val, mode='transform', feas_used=None)
+        self.x_test_scaled = self.zscore(self.x_test, mode='transform', feas_used=None)
+        
+        self.y_train_scaled = self.zscore(self.y_train, mode='fit_transform', feas_used=None)
+        self.y_val_scaled = self.zscore(self.y_val, mode='transform', feas_used=None)
+        self.y_test_scaled = self.zscore(self.y_test, mode='transform', feas_used=None)
+       
     def feature_engineering(self, data, config):
         df = deepcopy(data)
         from model.feature_engineer import date_to_timeFeatures, dir_to_sincos_dir, fea_shift, speed_diff, rad_diff
@@ -141,8 +143,8 @@ class ShortTermAgent():
         # Embedded method use Lasso
         from sklearn.linear_model import Lasso
         lasso = Lasso(alpha=0.001)
-        lasso.fit(self.x_train_scaled, self.y_train)
-        embedded_feas_used = self.x_train.columns[lasso.coef_ != 0]
+        lasso.fit(self.x_train_scaled, self.y_train_scaled)
+        embedded_feas_used = self.x_train_scaled.columns[lasso.coef_ != 0]
         print('embedded_feas_used:', embedded_feas_used)
 
         ##test original feas and three methods' selected feas and find the best
@@ -151,13 +153,13 @@ class ShortTermAgent():
         feas=[list(self.x_train.columns),filter_feas_used, wrapper_feas_used,embedded_feas_used]
         for id,feas_list in enumerate(feas):
             model.fit(self.x_train[feas_list],self.y_train)
-            y_test_pred=model.predict(self.x_test[feas_list])
+            y_val_pred=model.predict(self.x_val[feas_list])
             
-            res=get_res(y_test_pred, self.y_test)
-            test_score = eval_res(res, config.capacity)
-            print(f'{names[id]}:',test_score)
-            dic[id]=test_score
-        return list(feas[max(dic,key=dic.get)]) ##get the feas with best test_score
+            res=get_res(y_val_pred, self.y_val)
+            val_score = eval_res(res, config.capacity)
+            print(f'{names[id]}:',val_score)
+            dic[id]=val_score
+        return list(feas[max(dic,key=dic.get)]) ##get the feas with best val_score
         
 
 
