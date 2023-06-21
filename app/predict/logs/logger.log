@@ -1,10 +1,10 @@
-2023-06-20 17:10:28,609 - main_predict.py[line:31] - INFO: 1078 start training!##################################
-2023-06-20 17:10:28,624 - main_predict.py[line:36] - INFO: write_STATUS_file succeed!
-2023-06-20 17:10:28,641 - main_predict.py[line:42] - INFO: get_config succeed!
-2023-06-20 17:10:30,926 - main_predict.py[line:46] - INFO: create_agent succeed!
-2023-06-20 17:10:30,940 - main_predict.py[line:50] - INFO: load_data succeed!
-2023-06-20 17:10:31,109 - main_predict.py[line:63] - INFO: data_clean succeed!
-2023-06-20 17:10:31,168 - main_predict.py[line:67] - INFO: feature_engineering succeed!
-2023-06-20 17:10:31,179 - main_predict.py[line:74] - INFO: model_load succeed!
-2023-06-20 17:10:31,188 - main_predict.py[line:77] - INFO: model_predict succeed!
-2023-06-20 17:10:31,212 - main_predict.py[line:90] - INFO: save_result succeed!
+2023-06-21 09:46:04,914 - main_predict.py[line:31] - INFO: 1078 start predicting!##################################
+2023-06-21 09:46:04,986 - main_predict.py[line:36] - INFO: write_STATUS_file succeed!
+2023-06-21 09:46:05,028 - main_predict.py[line:42] - INFO: get_config succeed!
+2023-06-21 09:46:07,322 - main_predict.py[line:46] - INFO: create_agent succeed!
+2023-06-21 09:46:07,390 - main_predict.py[line:50] - INFO: load_data succeed!
+2023-06-21 09:46:07,540 - main_predict.py[line:63] - INFO: data_clean succeed!
+2023-06-21 09:46:07,587 - main_predict.py[line:67] - INFO: feature_engineering succeed!
+2023-06-21 09:46:07,596 - main_predict.py[line:74] - INFO: model_load succeed!
+2023-06-21 09:46:07,606 - main_predict.py[line:77] - INFO: model_predict succeed!
+2023-06-21 09:46:07,633 - main_predict.py[line:90] - INFO: save_result succeed!

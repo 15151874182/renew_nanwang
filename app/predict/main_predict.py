@@ -54,7 +54,7 @@ try:
             config.feas_used.remove('Power') ##'Power' not need in predict
             config.trend=None 
             try: # make sure clean_area wont fail!
-                cln_data = cleaner.clean_area(config,online=True,plot=False) ##cln means cleaned
+                cln_data = cleaner.clean_area(config,online=False,plot=False) ##cln means cleaned
             except:
                 cln_data=config.data[config.feas_selected].interpolate(method='linear')
                 logger.info(traceback.format_exc())

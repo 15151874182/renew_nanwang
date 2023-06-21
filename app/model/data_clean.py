@@ -48,10 +48,10 @@ class Clean():
                                                 end="2024-12-31")
             self.suntime["sunrise_before"] = self.suntime["Sunrise"].apply(lambda x:pd.to_datetime(x).round('15T'))
             self.suntime["sunset_after"] = self.suntime["Sunset"].apply(lambda x:pd.to_datetime(x).round('15T'))  
-            self.suntime.to_csv('data/suntime.csv')
+            self.suntime.to_csv('config/suntime.csv')
             
         elif area_type=='pv' and online==False:
-            self.suntime = pd.read_csv('data/suntime.csv')
+            self.suntime = pd.read_csv('config/suntime.csv', parse_dates=['Date', 'Sunrise', 'Sunset', 'sunrise_before','sunset_after'])
             
 # =============================================================================             
         for col in tqdm(feas_used): ##every feas should handle_NAN,handle_limit,handle_constant
