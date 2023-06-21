@@ -1,15 +1,26 @@
-2023-06-21 09:43:03,014 - main_train.py[line:46] - INFO: 1078 start training!##################################
-2023-06-21 09:43:03,034 - main_train.py[line:51] - INFO: get_config succeed!
-2023-06-21 09:43:05,790 - main_train.py[line:55] - INFO: create_agent succeed!
-2023-06-21 09:43:05,894 - main_train.py[line:59] - INFO: load_data succeed!
-2023-06-21 09:43:17,517 - main_train.py[line:66] - INFO: data_clean succeed!
-2023-06-21 09:43:17,573 - main_train.py[line:69] - INFO: feature_engineering succeed!
-2023-06-21 09:43:17,589 - main_train.py[line:72] - INFO: data_split_scale succeed!
-2023-06-21 09:43:17,594 - main_train.py[line:76] - INFO: create_model succeed!
-2023-06-21 09:43:24,901 - main_train.py[line:80] - INFO: subset_selection succeed!
-2023-06-21 09:43:24,911 - main_train.py[line:86] - INFO: save_feas_selected succeed!
-2023-06-21 09:43:41,295 - main_train.py[line:91] - INFO: model_finetune succeed!
-2023-06-21 09:43:41,310 - main_train.py[line:98] - INFO: model_save succeed!
-2023-06-21 09:43:41,320 - main_train.py[line:104] - INFO: model_predict succeed!
-2023-06-21 09:43:41,365 - main_train.py[line:114] - INFO: acc_mape: 0.42890905644536337 !!!!!!!!!!!
-2023-06-21 09:43:41,699 - main_train.py[line:117] - INFO: eval_res succeed!
+2023-06-21 15:34:35,981 - main_train.py[line:46] - INFO: 2365 start training!##################################
+2023-06-21 15:34:35,996 - main_train.py[line:51] - INFO: area_train_path:D:\cty\load_forcast\renew_nanwang\app\model\data\DQYC\20220807\2365
+2023-06-21 15:34:35,998 - main_train.py[line:52] - INFO: area_type:pv
+2023-06-21 15:34:36,000 - main_train.py[line:53] - INFO: capacity:100.0
+2023-06-21 15:34:36,002 - main_train.py[line:54] - INFO: feas_used:['Groundradiation', 'Temp2', 'GroundTemp', 'Power']
+2023-06-21 15:34:36,004 - main_train.py[line:55] - INFO: feas_selected:['Groundradiation', 'Temp2', 'GroundTemp', 'HourOfDay']
+2023-06-21 15:34:36,006 - main_train.py[line:56] - INFO: trend:['Groundradiation', 'Power', '0.8']
+2023-06-21 15:34:36,008 - main_train.py[line:59] - INFO: get_config succeed!
+2023-06-21 15:34:38,521 - main_train.py[line:63] - INFO: create_agent succeed!
+2023-06-21 15:34:38,629 - main_train.py[line:67] - INFO: load_data succeed!
+2023-06-21 15:34:38,665 - data_clean.py[line:76] - INFO: Groundradiation,upper=1400,lower=0
+2023-06-21 15:34:41,183 - data_clean.py[line:76] - INFO: Temp2,upper=48,lower=-15
+2023-06-21 15:34:41,202 - data_clean.py[line:76] - INFO: GroundTemp,upper=48,lower=-15
+2023-06-21 15:34:41,222 - data_clean.py[line:76] - INFO: Power,upper=100.0,lower=0
+2023-06-21 15:34:44,463 - main_train.py[line:74] - INFO: data_clean succeed!
+2023-06-21 15:34:44,539 - main_train.py[line:77] - INFO: feature_engineering succeed!
+2023-06-21 15:34:44,550 - main_train.py[line:80] - INFO: data_split_scale succeed!
+2023-06-21 15:34:44,555 - main_train.py[line:84] - INFO: create_model succeed!
+2023-06-21 15:34:47,126 - main_train.py[line:88] - INFO: subset_selection succeed!
+2023-06-21 15:34:47,135 - main_train.py[line:94] - INFO: save_feas_selected succeed!
+2023-06-21 15:35:04,514 - main_train.py[line:99] - INFO: model_finetune succeed!
+2023-06-21 15:35:04,532 - main_train.py[line:106] - INFO: model_save succeed!
+2023-06-21 15:35:04,545 - main_train.py[line:112] - INFO: model_predict succeed!
+2023-06-21 15:35:04,710 - main_train.py[line:116] - INFO: post_process succeed!
+2023-06-21 15:35:04,758 - main_train.py[line:122] - INFO: acc_mape: 0.3690060924508233 !!!!!!!!!!!
+2023-06-21 15:35:05,014 - main_train.py[line:125] - INFO: eval_res succeed!

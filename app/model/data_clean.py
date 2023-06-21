@@ -151,8 +151,8 @@ class Clean():
         for i in constant_end_index:
             constant_index+=[j for j in range(i-threshold+1,i+1)]
         df['index']=df['index'].apply(lambda x: False if x in constant_index else True)
-        idx=df[df['index']==False].index
-        df[col].loc[idx]=np.nan
+        # idx=df[df['index']==False].index
+        df[col].loc[df[df['index']==False].index]=np.nan ##set df[col] to NAN where index==False
         del df['index'],df['constant_std'],df['constant_mu'] ##delete auxiliary varible
         return df
 

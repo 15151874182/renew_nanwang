@@ -29,7 +29,7 @@ try:  ##any bug of whole procedure will be recorded in ./logs/logger.log
         parser.add_argument(
             "--area",
             type=str,
-            default="1078",  # all for all areas // NARI-19008-Xibei-dtqlyf,NARI-19008-Xibei-dtqlyf for 2 areas
+            default="2365",  # all for all areas // NARI-19008-Xibei-dtqlyf,NARI-19008-Xibei-dtqlyf for 2 areas
             help="name of areas to predict, 1, more, all areas both ok",
         )
         args = parser.parse_args()
@@ -69,7 +69,7 @@ try:  ##any bug of whole procedure will be recorded in ./logs/logger.log
                 from model.data_clean import Clean
                 cleaner = Clean()        
                 # cln_data = cleaner.clean_area(config,online=False,plot=False) ##cln means cleaned
-                cln_data = cleaner.clean_area(config,online=False,plot=[['Power', 'Speed100'], "2022-05-02", 30])
+                cln_data = cleaner.clean_area(config,online=False,plot=[['Power', 'Groundradiation'], "2022-05-02", 30])
                 cln_data=cln_data.dropna()# cleaned_data change unwanted data into NaN,so dropna used in 'train' mode    
                 logger.info('data_clean succeed!')
             # feature_engineering======================================================================        
